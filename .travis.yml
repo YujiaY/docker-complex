@@ -1,0 +1,17 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t aujackyuan/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true aujackyuan/react-test npm test
+
+after_success:
+  - docker build -t aujackyuan/multi-client ./client
+  - docker build -t aujackyuan/multi-nginx ./nginx
+  - docker build -t aujackyuan/multi-server ./server
+  - docker build -t aujackyuan/multi-worker ./worker
+
+  
